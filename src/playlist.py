@@ -68,19 +68,21 @@ class PlayList:
         return datetime.timedelta(seconds=total_seconds)
 
     def show_best_video(self) -> str:
+
         """Возвращает ссылку на самое популярное видео из плейлиста (по количеству лайков)."""
         best_video_id = None
         max_likes = 0
 
         video_response = youtube.videos().list(
             part='statistics',
-            id=','.join(self.videos)
-        ).execute()
+            id=','.join(self.videos)).execute()
 
-        for video in video_response['items']:
+        for video in video_response.get('items', []):
             like_count = int(video['statistics'].get('likeCount', 0))
             if like_count > max_likes:
                 max_likes = like_count
                 best_video_id = video['id']
 
-        return f"https://www.youtube.com/watch?v={best_video_id}" if best_video_id else None
+        # Изменяем формат ссылки на https://youtu.be/{best_video_id}
+        return f"https://youtu.be/{best_video_id}" if best_video_id else None
+
