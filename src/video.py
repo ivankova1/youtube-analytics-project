@@ -15,10 +15,19 @@ youtube = build('youtube', 'v3', developerKey=api_key)
 class Video:
     def __init__(self, video_id: str):
         self.video_id = video_id
-        self.title = self.get_video_data()['title']
+        self.title = None
         self.url = f'https://www.youtube.com/watch?v={self.video_id}'
-        self.view_count = self.get_video_data()['view_count']
-        self.like_count = self.get_video_data()['like_count']
+        self.view_count = None
+        self.like_count = None
+
+        try:
+            video_data = self.get_video_data()
+            self.title = video_data['title']
+            self.view_count = video_data['view_count']
+            self.like_count = video_data['like_count']
+        except Exception as e:
+            print(f"Ошибка при получении данных о видео: {e}")
+
 
     def get_video_data(self):
         video_response = youtube.videos().list(

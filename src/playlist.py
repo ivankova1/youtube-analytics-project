@@ -83,6 +83,5 @@ class PlayList:
                 max_likes = like_count
                 best_video_id = video['id']
 
-        # Изменяем формат ссылки на https://youtu.be/{best_video_id}
         return f"https://youtu.be/{best_video_id}" if best_video_id else None
 
